@@ -15,5 +15,5 @@ class Car(Base):
     color = Column(String)
     mileage = Column(Integer)
     doors = Column(Integer)
-    transmition = Column(String)
+    transmission = Column(String)
     price = Column(Float)

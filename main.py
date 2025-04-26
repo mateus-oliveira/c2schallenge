@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
-from app import config, models
+from app import models
+from app.database import config
 
 
 app = FastAPI()
