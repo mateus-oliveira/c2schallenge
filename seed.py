@@ -24,7 +24,7 @@ def seed():
     new = 0
 
     filters = [
-        (row["brand"], row["model"], int(row["year"]))
+        (row["brand"], row["model"], row["color"], int(row["year"]))
         for row in rows
     ]
 
@@ -33,17 +33,18 @@ def seed():
             and_(
                 Car.brand == brand,
                 Car.model == model,
+                Car.color == color,
                 Car.year == year
-            ) for brand, model, year in filters
+            ) for brand, model, color, year in filters
         )
     ).all()
 
-    existing_set = set((car.brand, car.model, car.year) for car in existing)
+    existing_set = set((car.brand, car.model, car.color, car.year) for car in existing)
 
     new_cars = []
 
     for row in rows:
-        if (row["brand"], row["model"], int(row["year"])) not in existing_set:
+        if (row["brand"], row["model"], row["color"], int(row["year"])) not in existing_set:
             new_car = Car(
                 brand=row["brand"],
                 model=row["model"],
