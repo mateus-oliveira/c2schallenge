@@ -6,10 +6,19 @@ from openai import OpenAI
 from typing import Optional
 
 from app.models.enums import Transmission, Fuel
-from app.settings import BASE_URL, OPEN_AI_API_KEY
+from app.config.settings import OPEN_AI_API_KEY
 
 
 def llm_interpreter(sentence: str) -> dict:
+    """
+    This function uses OpenAI's API to interpret a given sentence and extract car filters.
+
+    Args:
+        sentence (str): The input sentence containing car search details.
+
+    Returns:
+        dict: A dictionary containing the extracted filters.
+    """
     prompt = f"""
     Voce é um agente que ajuda a buscar veículos em um banco de dados.
     Dado o texto abaixo, extraia os possíveis filtros e retorne em formato JSON:
@@ -39,7 +48,14 @@ def llm_interpreter(sentence: str) -> dict:
             ],
             response_format={"type": "json_object"},
         )
-        return json.loads(response.choices[0].message.content)
+        parameters = json.loads(response.choices[0].message.content)
+
+        if 'transmission' in parameters:
+            parameters['transmission'] = validate_transmission(parameters['transmission'])
+        if 'fuel' in parameters:
+            parameters['fuel'] = validate_fuel(parameters['fuel'])
+
+        return parameters
     except Exception as e:
         print(f"Error when calling Open AI: {e}")
         return {}
@@ -57,40 +73,3 @@ def validate_fuel(fuel: Optional[str] = None) -> str:
         return Fuel[fuel.upper()].value
     except (KeyError, AttributeError):
         return None
-
-
-def main():
-    """
-    Main function to interact with the user and fetch car data.
-    """
-    brand = input("Qual marca e modelo do carro que você está buscando? ")
-    year = input("Qual ano do carro? ")
-    price = input("Qual o preço máximo que você está disposto a pagar? ")
-    other_info = input("Mais algum detalhe para sua busca (câmbio, motor, cor, etc)? ")
-
-    parameters = llm_interpreter(
-        f"""
-        Busque um carro com os seguintes detalhes:
-        Marca/Modelo: {brand}
-        Ano: {year}
-        Preço: {price}
-        Outros detalhes: {other_info}
-        """
-    )
-
-    if 'transmission' in parameters:
-        parameters['transmission'] = validate_transmission(parameters['transmission'])
-    
-    if 'fuel' in parameters:
-        parameters['fuel'] = validate_fuel(parameters['fuel'])
-    
-    response = requests.get(f'{BASE_URL}/cars', params=parameters)
-    
-    if response.status_code == status.HTTP_200_OK:
-        print(json.dumps(response.json(), indent=2, ensure_ascii=False))
-    else:
-        print(f"Error: {response.status_code}")
-
-
-if __name__ == '__main__':
-    main()

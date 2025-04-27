@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.models import schemas, models
 
 
-def filter_cars(db: Session, filters: schemas.Car):
+def filter_cars(db: Session, filters: schemas.Car) -> list[models.Car]:
     """
     Filters cars based on the provided filters.
 
