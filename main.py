@@ -2,15 +2,14 @@ from fastapi import Depends, FastAPI, Query
 from sqlalchemy.orm import Session
 from typing import Annotated
 
-
 from app import daos
 from app.models import models, schemas
 from app.database import config
 
 
 app = FastAPI()
-
 models.Base.metadata.create_all(bind=config.engine)
+
 
 @app.get("/")
 async def liveness_probe():
@@ -19,6 +18,7 @@ async def liveness_probe():
         'author': 'Mateus Oliveira',
         'date': '23/04/2025',
     }
+
 
 @app.get("/cars")
 async def get_cars(
