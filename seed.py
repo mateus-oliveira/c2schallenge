@@ -46,15 +46,15 @@ def seed():
     for row in rows:
         if (row["brand"], row["model"], row["color"], int(row["year"])) not in existing_set:
             new_car = Car(
-                brand=row["brand"],
-                model=row["model"],
+                brand=row["brand"].upper(),
+                model=row["model"].upper(),
                 year=int(row["year"]),
                 engine=row["engine"],
-                fuel=row["fuel"],
-                color=row["color"],
+                fuel=row["fuel"].upper(),
+                color=row["color"].upper(),
                 mileage=int(row["mileage"]),
                 doors=int(row["doors"]),
-                transmission=row["transmission"],
+                transmission=row["transmission"].upper(),
                 price=float(row["price"])
             )
             new_cars.append(new_car)
