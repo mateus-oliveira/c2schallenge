@@ -2,7 +2,7 @@ import csv
 
 from sqlalchemy import and_, or_
 
-from app.models import Base, Car
+from app.models.models import Base, Car
 from app.database.config import SessionLocal, engine
 
 Base.metadata.create_all(bind=engine)
@@ -12,7 +12,7 @@ def seed():
     """
     Seed the database with car data from a CSV file.
     This function reads car data from a CSV file, 
-    checks for existing recolords in the database.
+    checks for existing records in the database.
     """
     db = SessionLocal()
 
