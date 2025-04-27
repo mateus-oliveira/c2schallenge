@@ -3,6 +3,7 @@ import requests
 
 from fastapi import status
 from openai import OpenAI
+from typing import Optional
 
 from app.models.enums import Transmission, Fuel
 from app.settings import BASE_URL, OPEN_AI_API_KEY
@@ -18,7 +19,7 @@ def llm_interpreter(sentence: str) -> dict:
         "model": str | null,
         "year": int | null,
         "engine": str | null,
-        "fuel": str | null, // "FLEX", "GASOLINE", "HYBRID", "ELETRIC" or "DIESEL"
+        "fuel": str | null, // "FLEX", "GASOLINE", "HYBRID", "ELECTRIC" or "DIESEL"
         "color": str | null,
         "mileage": int | null,
         "doors": int | null,
@@ -31,30 +32,30 @@ def llm_interpreter(sentence: str) -> dict:
     client = OpenAI(api_key=OPEN_AI_API_KEY)
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",  # or "gpt-4" for more advanced capabilities
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": sentence}
             ],
-            response_format={"type": "json_object"}
+            response_format={"type": "json_object"},
         )
-        return response.choices[0].message.content
+        return json.loads(response.choices[0].message.content)
     except Exception as e:
         print(f"Error when calling Open AI: {e}")
         return {}
 
 
-def validate_transmission(transmission: str) -> str:
+def validate_transmission(transmission: Optional[str] = None) -> str:
     try:
         return Transmission[transmission.upper()].value
-    except KeyError:
+    except (KeyError, AttributeError):
         return None
 
 
-def validate_fuel(fuel: str) -> str:
+def validate_fuel(fuel: Optional[str] = None) -> str:
     try:
         return Fuel[fuel.upper()].value
-    except KeyError:
+    except (KeyError, AttributeError):
         return None
 
 
@@ -65,7 +66,7 @@ def main():
     brand = input("Qual marca e modelo do carro que você está buscando? ")
     year = input("Qual ano do carro? ")
     price = input("Qual o preço máximo que você está disposto a pagar? ")
-    other_info = input("Mais algum detalhe para sua busca? ")
+    other_info = input("Mais algum detalhe para sua busca (câmbio, motor, cor, etc)? ")
 
     parameters = llm_interpreter(
         f"""

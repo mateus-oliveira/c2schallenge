@@ -30,7 +30,7 @@ def filter_cars(db: Session, filters: schemas.Car):
             elif key == 'year':
                 filter_conditions.append(models.Car.year >= value)
             else:
-                filter_conditions.append(getattr(models.Car, key) == value)
+                filter_conditions.append(getattr(models.Car, key) == value.upper())
 
         query = query.filter(*filter_conditions)
 
