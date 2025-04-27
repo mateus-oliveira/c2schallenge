@@ -11,8 +11,7 @@ export default function App() {
     try {
       setLoading(true);
       const response = await axios.get(
-          // `http://localhost:8000/cars?sentence=${encodeURIComponent(sentence)}`
-          `http://localhost:8000/cars?brand=Fiat`
+        `http://localhost:8000/cars/ai?sentence=${encodeURIComponent(sentence)}`
       );
       setCars(response.data);
     } catch (error) {
