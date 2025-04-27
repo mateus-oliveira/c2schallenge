@@ -39,7 +39,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>C2S - Cars to Sell</Text>
+      <Text style={styles.header}>C2S - Cars to Sale</Text>
       <TextInput
         style={styles.input}
         placeholder="Informe os detalhes do veículo que está procurando"
