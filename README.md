@@ -39,6 +39,23 @@ pytest -vv
 fastapi dev main.py
 ```
 
+## Prompt
+
+The agent used to filter cars with the OpenAI API is in the `api/prompt.py` module.
+
+You must need to run the API (follow the previous step) before executing the prompt.
+
+Then, in another terminal tab, run the following commands also:
+
+```bash
+cd api
+source venv/bin/activate
+
+# run prompt
+python prompt.py
+```
+
+
 ## Mobile
 
 This mobile app most use Node 20
