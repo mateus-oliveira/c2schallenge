@@ -32,6 +32,9 @@ Then, create the containers for the PostgreSQL database with the following comma
 # create postgres docker container
 sudo docker compose up
 
+# Populate fake records from cars.csv
+python seed.py
+
 # run tests
 pytest -vv
 
