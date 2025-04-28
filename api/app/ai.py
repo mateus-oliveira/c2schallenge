@@ -1,7 +1,5 @@
 import json
-import requests
 
-from fastapi import status
 from openai import OpenAI
 from typing import Optional
 

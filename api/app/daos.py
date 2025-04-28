@@ -29,6 +29,8 @@ def filter_cars(db: Session, filters: schemas.Car) -> list[models.Car]:
                 filter_conditions.append(models.Car.mileage <= value)
             elif key == 'year':
                 filter_conditions.append(models.Car.year >= value)
+            elif key in {'id', 'year', 'mileage', 'doors', 'price'}:
+                filter_conditions.append(getattr(models.Car, key) == value)
             else:
                 filter_conditions.append(getattr(models.Car, key) == value.upper())
 
