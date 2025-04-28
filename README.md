@@ -1,4 +1,4 @@
-C2S - Cars to Sell
+C2S - Cars to Sale
 
 
 ## API
@@ -31,6 +31,9 @@ Then, create the containers for the PostgreSQL database with the following comma
 ```bash
 # create postgres docker container
 sudo docker compose up
+
+# run tests
+pytest -vv
 
 # run api
 fastapi dev main.py
